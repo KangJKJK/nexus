@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # 터미널 출력 색상 정의
 GREEN='\033[0;32m'
@@ -9,31 +8,29 @@ NC='\033[0m'
 
 echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 
-# 기존 protobuf 제거
-echo -e "${GREEN}기존 protobuf 제거 중...${NC}"
-sudo apt remove -y protobuf-compiler
-sudo apt autoremove -y
+# 1. 기존 파일 정리
+sudo rm -f /usr/local/bin/protoc
+rm -f protoc-25.1-linux-x86_64.zip*
 
-# 필수패키지 다운로드
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y curl git build-essential pkg-config libssl-dev unzip
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source $HOME/.cargo/env
+# 2. 다시 다운로드
+wget https://github.com/protocolbuffers/protobuf/releases/download/v25.1/protoc-25.1-linux-x86_64.zip
 
-rustc --version
-cargo --version
-rustup update
+# 3. unzip 설치 (혹시 없다면)
+sudo apt install -y unzip
 
-# Protobuf 다운
-wget https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip
-unzip protoc-21.12-linux-x86_64.zip -d $HOME/.local
-export PATH="$HOME/.local/bin:$PATH"
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+# 4. 압축 해제 및 설치
+sudo unzip protoc-25.1-linux-x86_64.zip -d /usr/local
+
+# 5. 권한 설정
+sudo chmod +x /usr/local/bin/protoc
+
+# 6. 버전 확인
+protoc --version
+
+# 7. 환경변수 설정
+export PROTOC=/usr/local/bin/protoc
+export PROTOC_FLAGS="--experimental_allow_proto3_optional"
 source ~/.bashrc
-
-cargo install protobuf-codegen
-rustup target add riscv32i-unknown-none-elf
-rustup component add rust-src
 
 #Nexus 설치
 
