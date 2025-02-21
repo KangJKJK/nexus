@@ -32,6 +32,9 @@ export PROTOC=/usr/local/bin/protoc
 export PROTOC_FLAGS="--experimental_allow_proto3_optional"
 source ~/.bashrc
 
+# 기존 .nexus 디렉토리 완전 제거
+rm -rf $HOME/.nexus
+
 #Nexus 설치
 
 mkdir -p $HOME/.nexus
