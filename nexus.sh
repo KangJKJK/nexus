@@ -8,6 +8,12 @@ NC='\033[0m'
 
 echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 
+# 0. 필수패키지 설치
+sudo apt update
+sudo apt install -y libssl-dev
+export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export OPENSSL_DIR=/usr
+
 # 1. 기존 파일 정리
 sudo rm -f /usr/local/bin/protoc
 rm -f protoc-25.1-linux-x86_64.zip*
