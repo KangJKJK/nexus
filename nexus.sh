@@ -11,8 +11,13 @@ echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 # 1. 기존 파일 정리
 sudo rm -f /usr/local/bin/protoc
 rm -f protoc-25.1-linux-x86_64.zip*
+rm -rf $HOME/.nexus
+rm -rf $HOME/.cargo
+rm -rf $HOME/.rustup
 
 # 2. 다시 다운로드
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -y
+source $HOME/.cargo/env
 wget https://github.com/protocolbuffers/protobuf/releases/download/v25.1/protoc-25.1-linux-x86_64.zip
 
 # 3. unzip 설치 (혹시 없다면)
