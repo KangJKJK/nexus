@@ -7,6 +7,13 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
+echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
+
+# 기존 protobuf 제거
+echo -e "${GREEN}기존 protobuf 제거 중...${NC}"
+sudo apt remove -y protobuf-compiler
+sudo apt autoremove -y
+
 # 필수패키지 다운로드
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y curl git build-essential pkg-config libssl-dev unzip
@@ -33,19 +40,7 @@ rustup component add rust-src
 mkdir -p $HOME/.nexus
 cd $HOME/.nexus
 git clone https://github.com/nexus-xyz/network-api
-cd network-api
-
-# 뉴버전 채크
-git fetch --tags
-git checkout $(git rev-list --tags --max-count=1)
-
-# CLI & build
-cd clients/cli
-cargo clean
-cargo build --release
-
-# 노드 구동
-cargo run --release -- --start --beta
+curl https://cli.nexus.xyz/ | sh
 
 # 완료 메시지
 echo -e "${GREEN}Nexus 노드 설치 과정이 완료되었습니다.${NC}"
