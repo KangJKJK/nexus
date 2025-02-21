@@ -8,14 +8,20 @@ NC='\033[0m'
 
 echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 
-# 0. 필수패키지 설치
+# 1. 먼저 기존 환경변수 제거
+unset OPENSSL_DIR
+unset OPENSSL_LIB_DIR
+unset OPENSSL_INCLUDE_DIR
+
+# 2. OpenSSL 개발 패키지 재설치
 sudo apt update
-sudo apt install -y libssl-dev
+sudo apt install -y libssl-dev pkg-config
+
+# 3. 올바른 환경변수 설정
 export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export OPENSSL_DIR=/usr
-export OPENSSL_DIR=/usr/local/ssl
-export OPENSSL_LIB_DIR=$OPENSSL_DIR/lib
-export OPENSSL_INCLUDE_DIR=$OPENSSL_DIR/include
+export OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu
+export OPENSSL_INCLUDE_DIR=/usr/include/openssl
 
 # 1. 기존 파일 정리
 sudo rm -f /usr/local/bin/protoc
