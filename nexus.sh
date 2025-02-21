@@ -15,6 +15,7 @@ unset OPENSSL_INCLUDE_DIR
 
 # 2. OpenSSL 개발 패키지 재설치
 sudo apt update
+sudo apt install -y build-essential
 sudo apt install -y libssl-dev pkg-config
 
 # 3. 올바른 환경변수 설정
