@@ -22,6 +22,7 @@ export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export OPENSSL_DIR=/usr
 export OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu
 export OPENSSL_INCLUDE_DIR=/usr/include/openssl
+source ~/.bashrc
 
 # 1. 기존 파일 정리
 sudo rm -f /usr/local/bin/protoc
