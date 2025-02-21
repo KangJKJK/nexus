@@ -13,6 +13,9 @@ sudo apt update
 sudo apt install -y libssl-dev
 export PKG_CONFIG_PATH=/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export OPENSSL_DIR=/usr
+export OPENSSL_DIR=/usr/local/ssl
+export OPENSSL_LIB_DIR=$OPENSSL_DIR/lib
+export OPENSSL_INCLUDE_DIR=$OPENSSL_DIR/include
 
 # 1. 기존 파일 정리
 sudo rm -f /usr/local/bin/protoc
