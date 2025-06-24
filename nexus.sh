@@ -6,8 +6,12 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+echo -e "${Yellow}Nexus 노드를 설치합니다.${NC}"
+echo -e "${RED}스크립트 실행 전에 screen을 필수로 실행하셔야합니다.${NC}"
+read -p "계속 진행하시려면 Enter를 누르세요..."
+
 # 1. 필수 패키지 설치
-echo -e "${YELLOW}필수 패키지(build-essential, manpages-dev, wget, curl, screen)를 설치합니다...${NC}"
+echo -e "${YELLOW}필수 패키지를 설치합니다...${NC}"
 sudo apt update & sudo apt upgrade -y
 sudo apt install screen curl build-essential pkg-config libssl-dev git-all -y
 sudo apt install protobuf-compiler -y
