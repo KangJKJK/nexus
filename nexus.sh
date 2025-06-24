@@ -6,39 +6,47 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-echo -e "${YELLOW}Nexus 노드 설치를 시작합니다.${NC}"
-echo -e "${RED}경고: 이 스크립트는 시스템의 핵심 라이브러리인 GLIBC를 직접 업그레이드합니다."
-echo -e "${RED}이 작업은 시스템에 예기치 않은 문제를 일으킬 수 있습니다.${NC}"
-read -p "계속 진행하시려면 Enter를 누르세요..."
-
-# 1. GLIBC 2.39 시스템에 직접 설치
-echo -e "${YELLOW}GLIBC 2.39 설치를 시작합니다...${NC}"
+# 1. 필수 패키지 설치
+echo -e "${YELLOW}필수 패키지(build-essential, manpages-dev, wget, curl, screen)를 설치합니다...${NC}"
+sudo apt update & sudo apt upgrade -y
+sudo apt install screen curl build-essential pkg-config libssl-dev git-all -y
+sudo apt install protobuf-compiler -y
+sudo apt install -y gawk bison gcc make wget tar
 sudo apt update
-sudo apt install -y build-essential manpages-dev wget
 
-# 이전 GLIBC 빌드 시도에서 남은 파일들을 제거합니다.
-rm -rf glibc-2.39 glibc-2.39.tar.gz
-wget --no-check-certificate http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
-tar -xzf glibc-2.39.tar.gz
-cd glibc-2.39
-mkdir build && cd build
-
-# --prefix=/usr 를 사용하여 시스템 라이브러리 경로에 직접 설치합니다.
-../configure --prefix=/usr
+# 2. GLIBC 2.39 설치
+echo -e "${YELLOW}GLIBC 2.39를 설치합니다...${NC}"
+wget -c https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.gz
+tar -zxvf glibc-2.39.tar.gz
+mkdir glibc-build
+cd glibc-build
+../configure --prefix=/opt/glibc-2.39
 make -j$(nproc)
 sudo make install
 
-# 2. Nexus 설치 준비
-echo -e "${YELLOW}Nexus 설치를 준비합니다...${NC}"
-cd $HOME
-rm -rf $HOME/.nexus
-mkdir -p $HOME/.nexus
-cd $HOME/.nexus
-wget -O nexus_s3.sh https://raw.githubusercontent.com/kooroot/Node_Executor-Nexus/refs/heads/main/nexus_s3.sh
-chmod +x nexus_s3.sh
+# 3. 사용자로부터 Node ID를 입력받습니다.
+read -p "NODE ID를 입력하세요: " NODE_ID
 
-echo -e "${GREEN}Nexus 노드 설치 스크립트 다운로드 완료${NC}"
+if [[ -z "$NODE_ID" ]]; then
+    echo -e "${RED}오류: NODE ID는 비워둘 수 없습니다. 스크립트를 다시 실행하여 올바르게 입력해주세요.${NC}"
+    exit 1
+fi
 
-# 3. Nexus 노드 실행
-echo -e "${YELLOW}Nexus 노드 구동 중...${NC}"
-./nexus_s3.sh 
+# 4. Rust 설치
+echo -e "${YELLOW}Rust를 설치합니다...${NC}"
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source "$HOME/.cargo/env"
+rustup target add riscv32i-unknown-none-elf
+
+# 5. Nexus 설치
+curl https://cli.nexus.xyz/ | sh
+source ~/.bashrc
+/opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu /root/.nexus/bin/nexus-network start --node-id $NODE_ID
+
+# 6. 완료 메시지
+echo -e "${GREEN}=========================================${NC}"
+echo -e "${GREEN}Nexus 노드 설정이 완료되었습니다.${NC}"
+echo -e "${GREEN}=========================================${NC}"
+echo -e "${YELLOW}아래 명령어로 노드 로그를 확인할 수 있습니다:${NC}"
+echo -e "screen -r nexus_node"
+echo -e "${YELLOW}screen 세션에서 빠져나오려면 Ctrl+A를 누른 뒤 D를 누르세요.${NC}" 
