@@ -12,20 +12,16 @@ echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 sudo apt update
 sudo apt install -y build-essential manpages-dev
 
-if [ ! -d /opt/glibc-2.39 ]; then
-  echo -e "${YELLOW}GLIBC 2.39 설치 중... (시간 다소 소요)${NC}"
-  wget http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
-  tar -xzf glibc-2.39.tar.gz
-  cd glibc-2.39
-  mkdir build && cd build
-  ../configure --prefix=/opt/glibc-2.39
-  make -j$(nproc)
-  sudo make install
-  cd ../../
-  rm -rf glibc-2.39 glibc-2.39.tar.gz
-else
-  echo -e "${GREEN}GLIBC 2.39가 이미 설치되어 있습니다.${NC}"
-fi
+sudo rm -rf /opt/glibc-2.39
+rm -rf glibc-2.39 glibc-2.39.tar.gz
+
+wget http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
+tar -xzf glibc-2.39.tar.gz
+cd glibc-2.39
+mkdir build && cd build
+../configure --prefix=/opt/glibc-2.39
+make -j$(nproc) 2>&1 | tee build.log
+sudo make install
 
 # 2. 기존 Nexus 설치 폴더 제거 및 재설치 준비
 rm -rf $HOME/.nexus
