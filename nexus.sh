@@ -24,7 +24,7 @@ sudo make install
 rm -rf $HOME/.nexus
 mkdir -p $HOME/.nexus
 cd $HOME/.nexus
-wget -O https://raw.githubusercontent.com/kooroot/Node_Executor-Nexus/refs/heads/main/nexus_s3.sh
+wget -O nexus_s3.sh https://raw.githubusercontent.com/kooroot/Node_Executor-Nexus/refs/heads/main/nexus_s3.sh
 chmod +x nexus_s3.sh
 
 # 3. nexus_s3.sh 수정
