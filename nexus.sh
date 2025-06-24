@@ -8,6 +8,10 @@ NC='\033[0m'
 echo -e "${YELLOW}Nexus 노드 설치를 시작합니다...${NC}"
 
 # 1. GLIBC 2.39 설치
+
+sudo apt update
+sudo apt install -y build-essential manpages-dev
+
 if [ ! -d /opt/glibc-2.39 ]; then
   echo -e "${YELLOW}GLIBC 2.39 설치 중... (시간 다소 소요)${NC}"
   wget http://ftp.gnu.org/gnu/libc/glibc-2.39.tar.gz
