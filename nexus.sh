@@ -28,7 +28,7 @@ wget -O nexus_s3.sh https://raw.githubusercontent.com/kooroot/Node_Executor-Nexu
 chmod +x nexus_s3.sh
 
 # 3. nexus_s3.sh 수정
-sed -i 's|LD_LIBRARY_PATH=/opt/glibc-2.39/lib ./nexus-network|/opt/glibc-2.39/lib/ld-2.39.so --library-path /opt/glibc-2.39/lib ./nexus-network|' nexus_s3.sh
+sed -i 's|\("\(.*\)/nexus-network"\)|/opt/glibc-2.39/lib/ld-2.39.so --library-path /opt/glibc-2.39/lib \1|g' nexus_s3.sh
 
 echo -e "${GREEN}Nexus 노드 설치 스크립트 다운로드 및 수정 완료${NC}"
 
