@@ -36,6 +36,7 @@ echo -e "${GREEN}Nexus 노드 설치 스크립트 다운로드 완료${NC}"
 
 # 4. Nexus 노드 실행 (GLIBC 라이브러리 경로 지정)
 echo -e "${YELLOW}Nexus 노드 구동 중...${NC}"
+sed -i 's|LD_LIBRARY_PATH=/opt/glibc-2.39/lib ./nexus-network|export LD_LIBRARY_PATH=/opt/glibc-2.39/lib:$LD_LIBRARY_PATH\n/opt/glibc-2.39/lib/ld-2.39.so --library-path /opt/glibc-2.39/lib ./nexus-network|' nexus_s3.sh
 LD_LIBRARY_PATH=/opt/glibc-2.39/lib ./nexus_s3.sh
 
 # 완료 메시지
