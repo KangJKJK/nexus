@@ -42,5 +42,5 @@ LD_LIBRARY_PATH=/opt/glibc-2.39/lib ./nexus_s3.sh
 echo -e "${GREEN}Nexus 노드 설치 과정이 완료되었습니다.${NC}"
 echo -e "${YELLOW}1.대시보드 사이트는 다음과 같습니다: https://app.nexus.xyz/nodes/${NC}"
 echo -e "${YELLOW}2.노드상태는 다음명령어로 진입하세요: screen -r nexus_node${NC}"
-echo -e "${YELLOW}3.상태를 확인 후 컨트롤+AD로 스크린을 빠져나오셔야만 합니다.${NC}"
+echo -e "${YELLOW}3.상태를 확인 후 정상이라면 컨트롤+AD로 스크린을 빠져나오셔야만 합니다.${NC}"
 echo -e "${GREEN}스크립트작성자: https://t.me/kjkresearch${NC}"
