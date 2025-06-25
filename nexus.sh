@@ -18,7 +18,7 @@ echo -e "${YELLOW}3) 추가 구동 (새로운 스크린 필요)${NC}"
 read -p "선택하세요 (1, 2, 3): " main_choice
 
 case $main_choice in
-       1)
+      1)
         # 1. 필수 패키지 설치
         echo -e "${YELLOW}필수 패키지를 설치합니다...${NC}"
         sudo apt update & sudo apt upgrade -y
