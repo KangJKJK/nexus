@@ -7,7 +7,11 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 echo -e "${Yellow}Nexus 노드를 설치합니다.${NC}"
+echo -e "${Yellow}작성자: t.me/kjkresearch${NC}"
 echo -e "${RED}스크립트 실행 전에 screen을 필수로 실행하셔야합니다.${NC}"
+echo -e "${GREEN}1.설치 및 구동 진행 후 컨트롤 A+D로 스크린을 빠져나오세요.${NC}"
+echo -e "${GREEN}2.screen 세션 목록을 불러오신 후 특정 스크린으로 재진입시 현재 상태를 볼 수 있습니다.${NC}"
+echo -e "${GREEN}3.중복구동 시 사용중인 VPS의 RAM용량이 초과하지않도록 체크해야합니다.${NC}"
 read -p "계속 진행하시려면 Enter를 누르세요..."
 
 # 설치 옵션 선택
@@ -332,9 +336,3 @@ case $main_choice in
         fi
         ;;
 esac        
-
-# 6. 완료 메시지
-echo -e "${GREEN}설치가 성공적으로 완료되었습니다!${NC}"
-echo -e "${GREEN}screen 세션 목록: screen -ls${NC}"
-echo -e "${YELLOW}노드 중복구동 시 사용중인 VPS의 RAM용량이 초과하지않도록 체크해야합니다.${NC}"
-echo -e "${YELLOW}screen 세션에서 빠져나오려면 Ctrl+A를 누른 뒤 D를 누르세요.${NC}"
