@@ -19,7 +19,7 @@ echo -e "${YELLOW}설치 환경을 선택하세요:${NC}"
 echo -e "${YELLOW}1) Ubuntu 22.04 새 설치${NC}"
 echo -e "${YELLOW}2) Ubuntu 24.04 새 설치${NC}"
 echo -e "${YELLOW}3) 추가 구동 (22.04)${NC}"
-echo -e "${YELLOW}3) 추가 구동 (24.04)${NC}"
+echo -e "${YELLOW}4) 추가 구동 (24.04)${NC}"
 read -p "선택하세요 (1, 2, 3, 4): " main_choice
 
 case $main_choice in
@@ -337,7 +337,6 @@ case $main_choice in
                   echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
               fi
           fi
-          ;;
       esac 
       ;;
         
