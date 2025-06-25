@@ -338,8 +338,6 @@ case $main_choice in
               fi
           fi
           ;;
-      esac 
-      ;;
         
     4)
         echo -e "${YELLOW}기존에 구동중인 스크린과 다른 스크린을 실행해야만합니다.${NC}"
