@@ -6,6 +6,29 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+
+# 1. 기존에 스왑파일이 30GB로 설정되어 있다면 건너뜀
+if [ -f "/swapfile" ]; then
+  SIZE=$(sudo swapon --show | grep "/swapfile" | awk '{print $3}')
+  if [[ "$SIZE" == "30G" ]]; then
+    echo "30GB 스왑이 이미 설정되어 있습니다. 건너뜁니다..."
+    exit 0
+  fi
+fi
+
+# 2. 스왑파일 생성
+sudo swapoff /swapfile 2>/dev/null
+sudo rm -f /swapfile
+sudo fallocate -l 30G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# 3. 재부팅 후에도 유지되도록 설정
+if ! grep -q '/swapfile' /etc/fstab; then
+  echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
+fi
+
 echo -e "${Yellow}Nexus 노드를 설치합니다.${NC}"
 echo -e "${Yellow}작성자: t.me/kjkresearch${NC}"
 echo -e "${RED}스크립트 실행 전에 screen을 필수로 실행하셔야합니다.${NC}"
