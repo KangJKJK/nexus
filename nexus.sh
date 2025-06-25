@@ -6,25 +6,46 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-
-# 1. 기존에 스왑파일이 30GB로 설정되어 있다면 건너뜀
-if [ -f "/swapfile" ]; then
-  SIZE=$(sudo swapon --show | grep "/swapfile" | awk '{print $3}')
-  if [[ "$SIZE" == "30G" ]]; then
-    echo "30GB 스왑이 이미 설정되어 있습니다. 건너뜁니다..."
-    exit 0
-  fi
+# 스왑파일 존재 여부 확인
+if [ -f /swapfile ]; then
+  echo "스왑 파일이 이미 존재합니다. 스왑 설정을 건너뜁니다."
+  exit 0
 fi
 
-# 2. 스왑파일 생성
+# 1단계: 디스크 여유 공간 확인
+echo "1단계: 디스크 여유 공간 확인 중..."
+AVAILABLE_KB=$(df / | tail -1 | awk '{print $4}')  # 루트 파티션 여유 공간(kB)
+AVAILABLE_MB=$((AVAILABLE_KB / 1024))                # MB 단위로 변환
+echo "현재 루트 파티션 여유 공간: ${AVAILABLE_MB}MB"
+
+# 2단계: 스왑 크기 계산 (여유 공간의 80%)
+echo "2단계: 스왑 크기 계산 (여유 공간의 80%) 중..."
+SWAP_MB=$(( AVAILABLE_MB * 80 / 100 ))
+
+# 여유 공간이 너무 적으면 중단 (최소 1GB)
+if [ $SWAP_MB -lt 1024 ]; then
+  echo "디스크 여유 공간이 너무 적어 1GB 미만입니다. 스왑 설정을 중단합니다."
+  exit 1
+fi
+echo "스왑 파일 크기: ${SWAP_MB}MB 으로 설정합니다."
+
+# 3단계: 기존 스왑 해제 및 스왑 파일 삭제 (없어도 무시됨)
+echo "3단계: 기존 스왑 해제 및 스왑 파일 삭제 중..."
 sudo swapoff /swapfile 2>/dev/null
 sudo rm -f /swapfile
-sudo fallocate -l 30G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
 
-# 3. 재부팅 후에도 유지되도록 설정
+# 4단계: 스왑 파일 생성 및 권한 설정
+echo "4단계: 스왑 파일 생성 중..."
+sudo fallocate -l ${SWAP_MB}M /swapfile       # 스왑 파일 크기 할당
+sudo chmod 600 /swapfile                       # 파일 권한 설정 (보안)
+sudo mkswap /swapfile                          # 스왑 영역 초기화
+
+# 5단계: 스왑 활성화
+echo "5단계: 스왑 활성화 중..."
+sudo swapon /swapfile                          # 스왑 사용 시작
+
+# 6단계: 부팅 시 자동 활성화를 위한 fstab 설정
+echo "6단계: 부팅 시 자동 활성화를 위해 /etc/fstab에 등록 중..."
 if ! grep -q '/swapfile' /etc/fstab; then
   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
 fi
