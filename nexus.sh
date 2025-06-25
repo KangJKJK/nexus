@@ -14,7 +14,7 @@ read -p "계속 진행하시려면 Enter를 누르세요..."
 echo -e "${YELLOW}설치 환경을 선택하세요:${NC}"
 echo -e "${YELLOW}1) Ubuntu 22.04 새 설치${NC}"
 echo -e "${YELLOW}2) Ubuntu 24.04 새 설치${NC}"
-echo -e "${YELLOW}3) 추가 구동 (이미 설치된 환경에서 실행)${NC}"
+echo -e "${YELLOW}3) 추가 구동 (새로운 스크린 필요)${NC}"
 read -p "선택하세요 (1, 2, 3): " main_choice
 
 case $main_choice in
