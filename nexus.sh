@@ -18,7 +18,7 @@ echo -e "${YELLOW}3) 추가 구동 (새로운 스크린 필요)${NC}"
 read -p "선택하세요 (1, 2, 3): " main_choice
 
 case $main_choice in
-    1)
+       1)
         # 1. 필수 패키지 설치
         echo -e "${YELLOW}필수 패키지를 설치합니다...${NC}"
         sudo apt update & sudo apt upgrade -y
@@ -97,14 +97,14 @@ case $main_choice in
                 echo -e "${YELLOW}Nexus 경로: $nexus_path${NC}"
 
                 if [[ -f "$nexus_path/nexus-network" ]]; then
-                    "$nexus_path/nexus-network" start --node-id $node_id
+                    /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$nexus_path/nexus-network" start --node-id $node_id
                 else
                     echo -e "${RED}오류: $nexus_path에서 nexus-network를 찾을 수 없습니다${NC}"
                     echo -e "${YELLOW}대체 경로를 시도합니다...${NC}"
                     if [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
-                        "$HOME/.nexus/bin/nexus-network" start --node-id $node_id
+                        /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$HOME/.nexus/bin/nexus-network" start --node-id $node_id
                     elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
-                        "/root/.nexus/bin/nexus-network" start --node-id $node_id
+                        /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "/root/.nexus/bin/nexus-network" start --node-id $node_id
                     else
                         echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
                     fi
@@ -119,11 +119,11 @@ case $main_choice in
 
                 echo -e "${YELLOW}1단계: 사용자 등록 중...${NC}"
                 if [[ -f "$nexus_path/nexus-network" ]]; then
-                    "$nexus_path/nexus-network" register-user --wallet-address $wallet_address
+                    /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$nexus_path/nexus-network" register-user --wallet-address $wallet_address
                 elif [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
-                    "$HOME/.nexus/bin/nexus-network" register-user --wallet-address $wallet_address
+                    /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$HOME/.nexus/bin/nexus-network" register-user --wallet-address $wallet_address
                 elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
-                    "/root/.nexus/bin/nexus-network" register-user --wallet-address $wallet_address
+                    /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "/root/.nexus/bin/nexus-network" register-user --wallet-address $wallet_address
                 else
                     echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
                     exit 1
@@ -134,11 +134,11 @@ case $main_choice in
                     
                     echo -e "${YELLOW}2단계: 노드 등록 중...${NC}"
                     if [[ -f "$nexus_path/nexus-network" ]]; then
-                        "$nexus_path/nexus-network" register-node
+                        /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$nexus_path/nexus-network" register-node
                     elif [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
-                        "$HOME/.nexus/bin/nexus-network" register-node
+                        /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$HOME/.nexus/bin/nexus-network" register-node
                     elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
-                        "/root/.nexus/bin/nexus-network" register-node
+                        /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "/root/.nexus/bin/nexus-network" register-node
                     fi
                     
                     if [ $? -eq 0 ]; then
@@ -146,11 +146,11 @@ case $main_choice in
                         
                         echo -e "${YELLOW}3단계: 노드 시작 중...${NC}"
                         if [[ -f "$nexus_path/nexus-network" ]]; then
-                            "$nexus_path/nexus-network" start
+                            /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$nexus_path/nexus-network" start
                         elif [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
-                            "$HOME/.nexus/bin/nexus-network" start
+                            /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$HOME/.nexus/bin/nexus-network" start
                         elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
-                            "/root/.nexus/bin/nexus-network" start
+                            /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "/root/.nexus/bin/nexus-network" start
                         fi
                     else
                         echo -e "${RED}오류: 노드 등록에 실패했습니다!${NC}"
