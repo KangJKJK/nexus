@@ -337,6 +337,7 @@ case $main_choice in
                   echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
               fi
           fi
+          ;;
       esac 
       ;;
         
