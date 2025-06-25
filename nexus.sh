@@ -1,4 +1,4 @@
-#!/bin/bashAdd commentMore actions
+#!/bin/bash
 
 # 컬러 정의
 GREEN='\033[0;32m'
