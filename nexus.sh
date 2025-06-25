@@ -28,25 +28,17 @@ cd glibc-build
 make -j$(nproc)
 sudo make install
 
-# 3. 사용자로부터 Node ID를 입력받습니다.
-read -p "NODE ID를 입력하세요: " NODE_ID
-
-if [[ -z "$NODE_ID" ]]; then
-    echo -e "${RED}오류: NODE ID는 비워둘 수 없습니다. 스크립트를 다시 실행하여 올바르게 입력해주세요.${NC}"
-    exit 1
-fi
-
-# 4. Rust 설치
+# 3. Rust 설치
 echo -e "${YELLOW}Rust를 설치합니다...${NC}"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 source "$HOME/.cargo/env"
 rustup target add riscv32i-unknown-none-elf
 
-# 5. Nexus 설치
+# 4. Nexus 설치
 curl https://cli.nexus.xyz/ | sh
 source ~/.bashrc
 
-# 6. 상세설치
+# 5. 상세설치
 
 # 실제 설치 경로 찾기
 NEXUS_PATH=""
@@ -165,7 +157,7 @@ case $choice in
         ;;
 esac
 
-# 7. 완료 메시지
+# 6. 완료 메시지
 echo -e "${GREEN}설치가 성공적으로 완료되었습니다!${NC}"
 echo -e "${GREEN}screen 세션 목록: screen -ls${NC}"
 echo -e "${YELLOW}screen 세션에서 빠져나오려면 Ctrl+A를 누른 뒤 D를 누르세요.${NC}
