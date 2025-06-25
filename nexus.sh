@@ -18,8 +18,9 @@ read -p "계속 진행하시려면 Enter를 누르세요..."
 echo -e "${YELLOW}설치 환경을 선택하세요:${NC}"
 echo -e "${YELLOW}1) Ubuntu 22.04 새 설치${NC}"
 echo -e "${YELLOW}2) Ubuntu 24.04 새 설치${NC}"
-echo -e "${YELLOW}3) 추가 구동 (새로운 스크린 필요)${NC}"
-read -p "선택하세요 (1, 2, 3): " main_choice
+echo -e "${YELLOW}3) 추가 구동 (22.04)${NC}"
+echo -e "${YELLOW}3) 추가 구동 (24.04)${NC}"
+read -p "선택하세요 (1, 2, 3, 4): " main_choice
 
 case $main_choice in
       1)
@@ -81,7 +82,7 @@ case $main_choice in
             exit 1
         fi
 
-        echo -e "${BLUE}설치 옵션을 선택하세요:${NC}"
+        echo -e "${BLUE}진행 옵션을 선택하세요:${NC}"
         echo -e "${YELLOW}1) 기존 NodeID 사용${NC}"
         echo -e "${YELLOW}2) 지갑 주소 사용 (새 노드)${NC}"
 
@@ -308,8 +309,8 @@ case $main_choice in
                 ;;
         esac
         ;;
-        
-    3)
+
+      3)
         echo -e "${YELLOW}기존에 구동중인 스크린과 다른 스크린을 실행해야만합니다.${NC}"
         echo -e "${YELLOW}구동중인 노드id가 아닌 다른 id를 입력하셔야합니다..${NC}"
         read -p "NodeID를 입력하세요: " node_id
@@ -317,6 +318,38 @@ case $main_choice in
             echo -e "${RED}오류: NodeID는 비워둘 수 없습니다!${NC}"
             exit 1
         fi
+        
+        # NodeID로 실행
+          nexus_path=$(cat /tmp/nexus_install_path.tmp 2>/dev/null || echo "$HOME/.nexus/bin")
+          echo -e "${BLUE}NodeID로 Nexus Network를 시작합니다: $node_id${NC}"
+          echo -e "${YELLOW}Nexus 경로: $nexus_path${NC}"
+      
+          if [[ -f "$nexus_path/nexus-network" ]]; then
+              /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$nexus_path/nexus-network" start --node-id $node_id
+          else
+              echo -e "${RED}오류: $nexus_path에서 nexus-network를 찾을 수 없습니다${NC}"
+              echo -e "${YELLOW}대체 경로를 시도합니다...${NC}"
+              if [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
+                  /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "$HOME/.nexus/bin/nexus-network" start --node-id $node_id
+              elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
+                  /opt/glibc-2.39/lib/ld-linux-x86-64.so.2 --library-path /opt/glibc-2.39/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu "/root/.nexus/bin/nexus-network" start --node-id $node_id
+              else
+                  echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
+              fi
+          fi
+          ;;
+      esac 
+      ;;
+        
+    4)
+        echo -e "${YELLOW}기존에 구동중인 스크린과 다른 스크린을 실행해야만합니다.${NC}"
+        echo -e "${YELLOW}구동중인 노드id가 아닌 다른 id를 입력하셔야합니다..${NC}"
+        read -p "NodeID를 입력하세요: " node_id
+        if [[ -z "$node_id" ]]; then
+            echo -e "${RED}오류: NodeID는 비워둘 수 없습니다!${NC}"
+            exit 1
+        fi
+        
         # NodeID로 실행
         nexus_path=$(cat /tmp/nexus_install_path.tmp 2>/dev/null || echo "$HOME/.nexus/bin")
         echo -e "${BLUE}NodeID로 Nexus Network를 시작합니다: $node_id${NC}"
