@@ -27,17 +27,28 @@ case $main_choice in
         sudo apt install -y gawk bison gcc make wget tar
         sudo apt update
 
-        # 1. Rust 설치
+        # 2. GLIBC 2.39 설치
+        echo -e "${YELLOW}GLIBC 2.39를 설치합니다...${NC}"
+        wget -c https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.gz
+        tar -zxvf glibc-2.39.tar.gz
+        cd ~/glibc-2.39
+        mkdir -p ../glibc-build
+        cd ../glibc-build
+        ../glibc-2.39/configure --prefix=/opt/glibc-2.39
+        make -j$(nproc)
+        sudo make install
+
+        # 3. Rust 설치
         echo -e "${YELLOW}Rust를 설치합니다...${NC}"
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
         source "$HOME/.cargo/env"
         rustup target add riscv32i-unknown-none-elf
 
-        # 2. Nexus 설치
+        # 4. Nexus 설치
         curl https://cli.nexus.xyz/ | sh
         source ~/.bashrc
 
-        # 3. 상세설치
+        # 5. 상세설치
 
         # 실제 설치 경로 찾기
         NEXUS_PATH=""
@@ -64,7 +75,7 @@ case $main_choice in
         else
             echo -e "${RED}오류: Nexus CLI 설치가 실패했을 수 있습니다!${NC}"
             exit 1
-fi
+        fi
 
         echo -e "${BLUE}설치 옵션을 선택하세요:${NC}"
         echo -e "${YELLOW}1) 기존 NodeID 사용${NC}"
@@ -164,17 +175,6 @@ fi
         sudo apt install protobuf-compiler -y
         sudo apt install -y gawk bison gcc make wget tar
         sudo apt update
-
-        # 1. GLIBC 2.39 설치
-        echo -e "${YELLOW}GLIBC 2.39를 설치합니다...${NC}"
-        wget -c https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.gz
-        tar -zxvf glibc-2.39.tar.gz
-        cd ~/glibc-2.39
-        mkdir -p ../glibc-build
-        cd ../glibc-build
-        ../glibc-2.39/configure --prefix=/opt/glibc-2.39
-        make -j$(nproc)
-        sudo make install
             
         # 2. Rust 설치
         echo -e "${YELLOW}Rust를 설치합니다...${NC}"
@@ -213,7 +213,7 @@ fi
         else
             echo -e "${RED}오류: Nexus CLI 설치가 실패했을 수 있습니다!${NC}"
             exit 1
-fi
+        fi
 
         echo -e "${BLUE}설치 옵션을 선택하세요:${NC}"
         echo -e "${YELLOW}1) 기존 NodeID 사용${NC}"
@@ -309,30 +309,28 @@ fi
         echo -e "${YELLOW}기존에 구동중인 스크린과 다른 스크린을 실행해야만합니다.${NC}"
         echo -e "${YELLOW}구동중인 노드id가 아닌 다른 id를 입력하셔야합니다..${NC}"
         read -p "NodeID를 입력하세요: " node_id
-            if [[ -z "$node_id" ]]; then
-                echo -e "${RED}오류: NodeID는 비워둘 수 없습니다!${NC}"
-                exit 1
-            fi
-            
-            # NodeID로 실행
-            nexus_path=$(cat /tmp/nexus_install_path.tmp 2>/dev/null || echo "$HOME/.nexus/bin")
-            echo -e "${BLUE}NodeID로 Nexus Network를 시작합니다: $node_id${NC}"
-            echo -e "${YELLOW}Nexus 경로: $nexus_path${NC}"
-
-            if [[ -f "$nexus_path/nexus-network" ]]; then
-                "$nexus_path/nexus-network" start --node-id $node_id
+        if [[ -z "$node_id" ]]; then
+            echo -e "${RED}오류: NodeID는 비워둘 수 없습니다!${NC}"
+            exit 1
+        fi
+        # NodeID로 실행
+        nexus_path=$(cat /tmp/nexus_install_path.tmp 2>/dev/null || echo "$HOME/.nexus/bin")
+        echo -e "${BLUE}NodeID로 Nexus Network를 시작합니다: $node_id${NC}"
+        echo -e "${YELLOW}Nexus 경로: $nexus_path${NC}"
+        if [[ -f "$nexus_path/nexus-network" ]]; then
+            "$nexus_path/nexus-network" start --node-id $node_id
+        else
+            echo -e "${RED}오류: $nexus_path에서 nexus-network를 찾을 수 없습니다${NC}"
+            echo -e "${YELLOW}대체 경로를 시도합니다...${NC}"
+            if [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
+                "$HOME/.nexus/bin/nexus-network" start --node-id $node_id
+            elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
+                "/root/.nexus/bin/nexus-network" start --node-id $node_id
             else
-                echo -e "${RED}오류: $nexus_path에서 nexus-network를 찾을 수 없습니다${NC}"
-                echo -e "${YELLOW}대체 경로를 시도합니다...${NC}"
-                if [[ -f "$HOME/.nexus/bin/nexus-network" ]]; then
-                    "$HOME/.nexus/bin/nexus-network" start --node-id $node_id
-                elif [[ -f "/root/.nexus/bin/nexus-network" ]]; then
-                    "/root/.nexus/bin/nexus-network" start --node-id $node_id
-                else
-                    echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
-                fi
+                echo -e "${RED}오류: nexus-network 실행 파일을 찾을 수 없습니다!${NC}"
             fi
-            ;;
+        fi
+        ;;
         esac
         ;;
 
