@@ -331,14 +331,7 @@ case $main_choice in
             fi
         fi
         ;;
-        esac
-        ;;
-
-    *)
-        echo -e "${RED}오류: 잘못된 선택입니다! 1, 2, 3 중에서 선택하세요.${NC}"
-        exit 1
-        ;;
-esac
+esac        
 
 # 6. 완료 메시지
 echo -e "${GREEN}설치가 성공적으로 완료되었습니다!${NC}"
