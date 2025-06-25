@@ -22,12 +22,13 @@ sudo apt update
 echo -e "${YELLOW}GLIBC 2.39를 설치합니다...${NC}"
 wget -c https://ftp.gnu.org/gnu/glibc/glibc-2.39.tar.gz
 tar -zxvf glibc-2.39.tar.gz
-mkdir glibc-build
-cd glibc-build
-../configure --prefix=/opt/glibc-2.39
+cd ~/glibc-2.39
+mkdir -p ../glibc-build
+cd ../glibc-build
+../glibc-2.39/configure --prefix=/opt/glibc-2.39
 make -j$(nproc)
 sudo make install
-
+       
 # 3. Rust 설치
 echo -e "${YELLOW}Rust를 설치합니다...${NC}"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
