@@ -160,4 +160,4 @@ esac
 # 6. 완료 메시지
 echo -e "${GREEN}설치가 성공적으로 완료되었습니다!${NC}"
 echo -e "${GREEN}screen 세션 목록: screen -ls${NC}"
-echo -e "${YELLOW}screen 세션에서 빠져나오려면 Ctrl+A를 누른 뒤 D를 누르세요.${NC}
+echo -e "${YELLOW}screen 세션에서 빠져나오려면 Ctrl+A를 누른 뒤 D를 누르세요.${NC}"
