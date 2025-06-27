@@ -413,7 +413,7 @@ case $main_choice in
         fi
         ;;
 
-      4)
+      5)
         #모든 스크린 종료
         screen -ls | grep Detached | awk '{print $1}' | xargs -I{} screen -S {} -X quit
 esac
