@@ -64,7 +64,9 @@ echo -e "${YELLOW}1) Ubuntu 22.04 새 설치${NC}"
 echo -e "${YELLOW}2) Ubuntu 24.04 새 설치${NC}"
 echo -e "${YELLOW}3) 추가 구동 (22.04)${NC}"
 echo -e "${YELLOW}4) 추가 구동 (24.04)${NC}"
-read -p "선택하세요 (1, 2, 3, 4): " main_choice
+echo -e "${YELLOW}5) 모든 스크린 종료${NC}"
+
+read -p "선택하세요 (1, 2, 3, 4, 5): " main_choice
 
 case $main_choice in
       1)
@@ -410,4 +412,8 @@ case $main_choice in
             fi
         fi
         ;;
-esac        
+
+      4)
+        #모든 스크린 종료
+        screen -ls | grep Detached | awk '{print $1}' | xargs -I{} screen -S {} -X quit
+esac
